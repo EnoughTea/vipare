@@ -2,7 +2,7 @@
 
 vipare is a simple command-line utility used to export pages from Visio diagrams. As you can guess, it uses COM interop with a hidden Visio instance, so Visio needs to be installed.
 
-Since a diagram can contain utility pages which you don't want to export, this tool ignores pages with names starting with one of the following 3 symbols: ``` `~` `!`.
+Since a diagram can contain utility pages which you don't want to export, this tool ignores pages with names starting with one of the following 3 symbols: `` ` `` `~` `!`.
 
 
 ### Usage examples
