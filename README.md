@@ -20,7 +20,7 @@ Export pages from three Visio diagrams to bmp files and store them in the specif
 
     -o, --output    (Default: <current directory>) Defines output directory for exported images.
 
-    -f, --format		(Default: png) Format indicates which export filter to use.
+    -f, --format	    (Default: png) Format indicates which export filter to use.
                     Supply one of file formats supported by Visio export
 					(bmp, dib, dwg, dxf, emf, emz, gif, htm, jpg, png, svg, svgz, tif, or wmf).
 					Default preference settings for the specified filter will be used.
