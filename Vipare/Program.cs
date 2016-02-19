@@ -107,7 +107,7 @@ namespace Vipare {
         }
 
         private static bool ShouldIgnorePage(Page page) {
-            string imageName = page.NameU;
+            string imageName = page.Name;
             return (imageName.StartsWith("~", StringComparison.Ordinal) ||
                 imageName.StartsWith("`", StringComparison.Ordinal) ||
                 imageName.StartsWith("!", StringComparison.Ordinal));
