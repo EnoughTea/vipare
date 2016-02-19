@@ -57,33 +57,53 @@ namespace Vipare {
             Contract.Requires(outputFolder != null);
             Contract.Requires(format != null);
 
-            var app = new InvisibleApp { ShowChanges = false };
-            var docs = app.Documents;
-            var doc = docs.Open(diagramFile);
-            var pages = doc.Pages;
-            // Iterators and COM are best kept separated.
-            for (int i = 1; i <= pages.Count; i++) {
-                var page = pages[i];
+            InvisibleApp app = null;
+            Documents docs = null;
+            Document doc = null;
+            Pages pages = null;
+            try {
+                app = new InvisibleApp { ShowChanges = false };
+                docs = app.Documents;
+                try {
+                    doc = docs.Open(diagramFile);
+                } catch (COMException e) {
+                    Console.WriteLine($"Could not open '{diagramFile}': {e.Message}");
+                    return;
+                }
+
+                pages = doc.Pages;
+                // Iterators and COM are best kept separated.
+                for (int i = 1; i <= pages.Count; i++) {
+                    ExportPage(pages, i, outputFolder, format);
+                }
+
+                doc.Close();
+                app.Quit();
+            } finally {
+                if (pages != null) Marshal.ReleaseComObject(pages);
+                if (doc != null) Marshal.ReleaseComObject(doc);
+                if (docs != null) Marshal.ReleaseComObject(docs);
+                if (app != null) Marshal.ReleaseComObject(app);
+            }
+        }
+
+        /// <summary> Exports page with given index from the specified Visio pages collection. </summary>
+        private static void ExportPage(Pages pages, int pageIndex, string outputFolder, string format) {
+            Page page = null;
+            try {
+                page = pages[pageIndex];
                 string imageName = page.NameU;
                 if (ShouldIgnorePage(page)) {
                     Console.WriteLine("{0,-2}", $"Ignoring '{imageName}'.");
-                    continue;
+                    return;
                 }
 
                 string imageFileName = Path.Combine(outputFolder, imageName);
                 page.Export(imageFileName + "." + format);
                 Console.WriteLine("{0,-2}", $"'{imageName}' done.");
-
-                Marshal.ReleaseComObject(page);
+            } finally {
+                if (page != null) Marshal.ReleaseComObject(page);
             }
-
-            doc.Close();
-            app.Quit();
-
-            Marshal.ReleaseComObject(pages);
-            Marshal.ReleaseComObject(doc);
-            Marshal.ReleaseComObject(docs);
-            Marshal.ReleaseComObject(app);
         }
 
         private static bool ShouldIgnorePage(Page page) {
