@@ -92,7 +92,7 @@ namespace Vipare {
             Page page = null;
             try {
                 page = pages[pageIndex];
-                string imageName = page.NameU;
+                string imageName = page.Name;
                 if (ShouldIgnorePage(page)) {
                     Console.WriteLine("{0,-2}", $"Ignoring '{imageName}'.");
                     return;
